@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprendizaje UX/UI Interactivo</title>
+    <style>
+        :root {
+            --primary: #6E48AA;
+            --secondary: #9D50BB;
+            --accent: #4776E6;
+            --light: #F5F7FA;
+            --dark: #1A1A2E;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #F44336;
+            --radius: 8px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            border-bottom: 2px solid white;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+        }
+
+        .learning-path {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .module-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .module-level {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .module-body {
+            padding: 1.5rem;
+        }
+
+        .module-body h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .progress-container {
+            margin: 1rem 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        .resources {
+            margin-top: 1rem;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+
+        .resource-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .resource-item:hover {
+            background: #f0f0f0;
+        }
+
+        .resource-item i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.8rem;
+            background: #f9f9f9;
+            border-radius: var(--radius);
+        }
+
+        .task-checkbox {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .task-text {
+            flex-grow: 1;
+        }
+
+        .task-completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .theory-section {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .theory-section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .theory-section p {
+            margin-bottom: 1rem;
+        }
+
+        .theory-section img {
+            max-width: 100%;
+            border-radius: var(--radius);
+            margin: 1rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-container {
+            margin: 2rem 0;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .modules {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>UX/UI Academy</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Inicio</a></li>
+                    <li><a href="#modules">Módulos</a></li>
+                    <li><a href="#theory">Teoría</a></li>
+                    <li><a href="#tasks">Tareas</a></li>
+                    <li><a href="#resources">Recursos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Aprende UX/UI de Manera Interactiva</h1>
+            <p>Domina los principios de diseño de experiencia de usuario e interfaz con nuestro sistema de aprendizaje práctico y basado en proyectos.</p>
+            <a href="#modules" class="btn">Comenzar Aprendizaje</a>
+            <a href="#theory" class="btn btn-outline">Ver Teoría</a>
+        </div>
+    </section>
+
+    <section class="learning-path" id="modules">
+        <div class="container">
+            <h2 class="section-title">Tu Ruta de Aprendizaje</h2>
+            <div class="modules">
+                <!-- Módulo 1 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-level">Principiante</span>
+                        <h3>Fundamentos de UX</h3>
+                    </div>
+                    <div class="module-body">
+                        <p>Introducción a los principios básicos de experiencia de usuario y diseño centrado en el usuario.</p>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Progreso</span>
+                                <span>25%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 25%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="resources">
+                            <div class="resource-item">
+                                <i class="fas fa-book"></i>
+                                <span>Guía de Principios UX</span>
+                            </div>
+                            <div class="resource-item">
+                                <i class="fas fa-video"></i>
+                                <span>Video: ¿Qué es UX?</span>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="btn" style="width: 100%; text-align: center; margin-top: 1rem;">Continuar</a>
+                    </div>
+                </div>
+                
+                <!-- Módulo 2 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-level">Intermedio</span>
+                        <h3>Investigación de Usuarios</h3>
+                    </div>
+                    <div class="module-body">
+                        <p>Aprende a realizar entrevistas, crear personas y mapas de empatía para entender a tus usuarios.</p>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Progreso</span>
+                                <span>10%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 10%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="resources">
+                            <div class="resource-item">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Plantilla de Entrevista</span>
+                            </div>
+                            <div class="resource-item">
+                                <i class="fas fa-project-diagram"></i>
+                                <span>Ejemplo de User Persona</span>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="btn" style="width: 100%; text-align: center; margin-top: 1rem;">Comenzar</a>
+                    </div>
+                </div>
+                
+                <!-- Módulo 3 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-level">Avanzado</span>
+                        <h3>Prototipado en Figma</h3>
+                    </div>
+                    <div class="module-body">
+                        <p>Domina las herramientas de Figma para crear prototipos interactivos y sistemas de diseño.</p>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Progreso</span>
+                                <span>0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="resources">
+                            <div class="resource-item">
+                                <i class="fab fa-figma"></i>
+                                <span>Kit UI Gratis</span>
+                            </div>
+                            <div class="resource-item">
+                                <i class="fas fa-laptop-code"></i>
+                                <span>Tutorial Figma</span>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="btn" style="width: 100%; text-align: center; margin-top: 1rem;">Empezar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" id="theory">
+        <div class="theory-section">
+            <h2>Teoría: Principios Básicos de UX</h2>
+            <p>El diseño de experiencia de usuario (UX) se centra en la creación de productos que proporcionen experiencias significativas y relevantes a los usuarios. Esto implica el diseño de todo el proceso de adquisición e integración del producto, incluidos los aspectos de branding, diseño, usabilidad y función.</p>
+            
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Proceso de diseño UX">
+            
+            <h3>Los 5 pilares del UX Design:</h3>
+            <ol>
+                <li>Investigación de usuarios</li>
+                <li>Arquitectura de información</li>
+                <li>Diseño de interacción</li>
+                <li>Prototipado</li>
+                <li>Pruebas de usabilidad</li>
+            </ol>
+            
+            <div class="tab-container">
+                <div class="tabs">
+                    <div class="tab active" data-tab="definition">Definición</div>
+                    <div class="tab" data-tab="process">Proceso</div>
+                    <div class="tab" data-tab="examples">Ejemplos</div>
+                </div>
+                
+                <div class="tab-content active" id="definition">
+                    <p>UX Design es el proceso de mejorar la satisfacción del usuario con un producto al mejorar la usabilidad, accesibilidad y placer proporcionado en la interacción con el producto.</p>
+                </div>
+                
+                <div class="tab-content" id="process">
+                    <p>El proceso típico de UX incluye: investigación, análisis, diseño, prototipado, pruebas e implementación. Es iterativo y centrado en el usuario.</p>
+                </div>
+                
+                <div class="tab-content" id="examples">
+                    <p>Ejemplos de buen UX: la simplicidad de Google, la experiencia fluida de Apple, la personalización de Netflix.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" id="tasks">
+        <div class="theory-section">
+            <h2>Tareas Prácticas</h2>
+            <p>Completa estas tareas para aplicar lo aprendido en el módulo de Fundamentos de UX:</p>
+            
+            <div class="task-item">
+                <input type="checkbox" class="task-checkbox" id="task1">
+                <label for="task1" class="task-text">Analizar 3 apps y evaluar su experiencia de usuario</label>
+            </div>
+            
+            <div class="task-item">
+                <input type="checkbox" class="task-checkbox" id="task2">
+                <label for="task2" class="task-text">Crear un mapa de empatía para un usuario objetivo</label>
+            </div>
+            
+            <div class="task-item">
+                <input type="checkbox" class="task-checkbox" id="task3" checked>
+                <label for="task3" class="task-text task-completed">Leer el artículo sobre principios de usabilidad</label>
+            </div>
+            
+            <div class="task-item">
+                <input type="checkbox" class="task-checkbox" id="task4">
+                <label for="task4" class="task-text">Diseñar un user flow para una app de reservas</label>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" id="resources">
+        <div class="theory-section">
+            <h2>Recursos Adicionales</h2>
+            
+            <div class="resource-item">
+                <i class="fas fa-link"></i>
+                <span><a href="https://www.nngroup.com/" target="_blank">NN/g - Artículos de investigación UX</a></span>
+            </div>
+            
+            <div class="resource-item">
+                <i class="fas fa-book"></i>
+                <span><a href="https://www.amazon.com/Dont-Make-Think-Revisited-Usability/dp/0321965515" target="_blank">Libro: Don't Make Me Think (Steve Krug)</a></span>
+            </div>
+            
+            <div class="resource-item">
+                <i class="fab fa-youtube"></i>
+                <span><a href="https://www.youtube.com/c/GoogleDesign" target="_blank">Canal de YouTube: Google Design</a></span>
+            </div>
+            
+            <div class="resource-item">
+                <i class="fas fa-tools"></i>
+                <span><a href="https://www.figma.com/resources/" target="_blank">Recursos gratuitos de Figma</a></span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2023 UX/UI Academy - Todos los derechos reservados</p>
+            <p>Sistema de aprendizaje interactivo</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sistema de pestañas
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remover clase active de todas las pestañas y contenidos
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Añadir clase active a la pestaña clickeada
+                tab.classList.add('active');
+                
+                // Mostrar el contenido correspondiente
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Sistema de checkboxes para tareas
+        const checkboxes = document.querySelectorAll('.task-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const label = this.nextElementSibling;
+                if(this.checked) {
+                    label.classList.add('task-completed');
+                    // Aquí podrías añadir lógica para guardar el progreso
+                } else {
+                    label.classList.remove('task-completed');
+                }
+            });
+        });
+        
+        // Simulación de progreso (en un sistema real esto vendría de una base de datos)
+        function simulateProgress() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const targetWidth = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = targetWidth;
+                }, 300);
+            });
+        }
+        
+        // Ejecutar al cargar la página
+        window.addEventListener('load', simulateProgress);
+    </script>
+</body>
+</html>
